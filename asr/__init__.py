@@ -53,12 +53,14 @@ def heartbeat():
 def recognise():
     stream = request.stream
 
-    access_token, part1, part2 = request.host.split('.', 1)[0].split('-', 3)
-    lang = f"{part1}-{part2.upper()}"
+#=== This is the part I took out ===#
+    # access_token, part1, part2 = request.host.split('.', 1)[0].split('-', 3)
+    # lang = f"{part1}-{part2.upper()}"
 
-    auth_req = requests.get(f"{AUTH_URL}/api/v1/me/token", headers={'Authorization': f"Bearer {access_token}"})
-    if not auth_req.ok:
-        abort(401)
+    # auth_req = requests.get(f"{AUTH_URL}/api/v1/me/token", headers={'Authorization': f"Bearer {access_token}"})
+    # if not auth_req.ok:
+    #     abort(401)
+#=== --------------------------- ===#
 
     chunks = iter(list(parse_chunks(stream)))
     content = next(chunks).decode('utf-8')
@@ -66,7 +68,7 @@ def recognise():
     body = {
         'config': {
             'encoding': 'SPEEX_WITH_HEADER_BYTE',
-            'language_code': lang,
+            'language_code': 'en-US', # hardcoded
             'sample_rate_hertz': 16000,
             'max_alternatives': 1,
             'enableAutomaticPunctuation': True,
